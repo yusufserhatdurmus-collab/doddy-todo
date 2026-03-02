@@ -1204,13 +1204,13 @@ html {
     }
 }
 
-/* Mobil ekranlarda yan panellerin kaydırılabilir olması için */
 .yan-panel-wrapper {
     overflow-y: auto;
-    max-height: 100vh;
-    padding-bottom: 40px;
-}
-
-.yan-panel-wrapper::-webkit-scrollbar {
-    display: none;
+    -webkit-overflow-scrolling: touch;
+    /* Özellikle iPhone/iOS cihazlarda o geri tepmeyi engeller, pürüzsüz kaydırır */
+    height: 100%;
+    max-height: 100dvh;
+    /* Yeni nesil dinamik ekran boyutu hesaplayıcısı */
+    padding-bottom: 120px !important;
+    /* Boşluğu abartıyoruz ki buton iyice yukarı çıksın, parmağının tam altına gelsin */
 }
