@@ -1204,21 +1204,24 @@ html {
     }
 }
 
-/* Mobil ekranlarda yan panellerin kusursuz kaydırılması için */
+
 .yan-panel-wrapper {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    /* Geri tepmeyi engeller ama paneli yerinden sökmez */
+
     height: 100%;
     max-height: 100dvh;
 }
 
-/* Panelin tasarımını ve arka planını BOZMADAN, sadece en alta görünmez bir kaydırma boşluğu ekler */
-.yan-panel-wrapper::after {
-    content: "";
-    display: block;
-    height: 100px;
-    /* Butonun altına nefes aldıracak boşluk */
-    width: 100%;
+
+/* Görünmez yastık SADECE mobil ekranlarda (1024px ve altı) ortaya çıksın */
+@media (max-width: 1024px) {
+    .yan-panel-wrapper::after {
+        content: "";
+        display: block;
+        height: 100px;
+        /* Sadece telefonda butonu yukarı iter */
+        width: 100%;
+    }
 }
