@@ -32,8 +32,8 @@ function App() {
 
   // Arayüzdeki yan panellerin ve uyarı pencerelerinin (modalların) açık/kapalı durumlarını burada tutuyorum.
   // DİKKAT: Bunları önce tanımlıyorum ki alt taraftaki görev mekanikleri kullanabilsin.
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 1024);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(window.innerWidth > 1024);
   const [filter, setFilter] = useState('hepsi');
   const [activeList, setActiveList] = useState('Ana Görevler');
   const [showResetModal, setShowResetModal] = useState(false);
