@@ -1,0 +1,1205 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+/* Kaydırma çubuğunu (scrollbar) oyunun karanlık temasına uygun şekilde tasarladım. */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #5c3a21;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #8a6c5e;
+}
+
+/* Sayfanın varsayılan boşluklarını sıfırlayıp, kendi temamı ve pixel fontumu uyguluyorum. */
+body,
+html {
+    background-color: #12100e;
+    color: #e6d8c3;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'VT323', monospace;
+    letter-spacing: 1px;
+}
+
+/* Uygulamanın ana iskeletini sol, orta ve sağ olmak üzere 3 parçalı bir ızgaraya (grid) oturtuyorum. */
+.masa-arkaplan {
+    width: 100vw;
+    height: 100vh;
+    background-color: #12100e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.calisma-masasi-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Yan panelleri ve onları açıp kapatan kenar oklarının (edge tabs) tasarımını ayarladım. */
+.yan-panel-wrapper {
+    height: 100vh;
+    flex-shrink: 0;
+    flex-grow: 0;
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+
+.yan-panel-wrapper.sol-panel {
+    width: 280px;
+}
+
+.yan-panel-wrapper.sag-panel {
+    width: 320px;
+}
+
+.yan-panel-wrapper.kapali {
+    width: 0 !important;
+}
+
+.sol-menu-kutu,
+.sag-menu-kutu {
+    background-color: #160e0a;
+    border-radius: 0;
+    padding: 25px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.sol-menu-kutu {
+    border-right: 1px solid #3e2723;
+}
+
+.sag-menu-kutu {
+    border-left: 1px solid #3e2723;
+}
+
+.kenar-ok {
+    position: fixed;
+    top: 50px;
+    background-color: #160e0a;
+    color: #ea580c;
+    border: 1px solid #ea580c;
+    width: 25px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.kenar-ok:hover {
+    background-color: #ea580c;
+    color: #160e0a;
+}
+
+.kenar-ok.sol-ok {
+    left: 0;
+    border-radius: 0 8px 8px 0;
+    border-left: none;
+}
+
+.kenar-ok.sol-ok.acik {
+    left: 280px;
+    border-radius: 8px 0 0 8px;
+    border-left: 1px solid #ea580c;
+    border-right: none;
+}
+
+.kenar-ok.sag-ok {
+    right: 0;
+    border-radius: 8px 0 0 8px;
+    border-right: none;
+}
+
+.kenar-ok.sag-ok.acik {
+    right: 320px;
+    border-radius: 0 8px 8px 0;
+    border-right: 1px solid #ea580c;
+    border-left: none;
+}
+
+/* Görevlerin listelendiği orta parşömen alanını ve o şık ışıklandırma efektlerini burada verdim. */
+.orta-parsomen-alani {
+    flex: 1 1 0%;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: transparent;
+}
+
+.ana-kart.dashboard-modu {
+    width: 100%;
+    max-width: 900px;
+    min-height: 95%;
+    padding: 40px 50px;
+    background-color: #e6d8c3;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%), radial-gradient(circle at 10% 20%, rgba(101, 67, 33, 0.05) 10%, transparent 40%), radial-gradient(circle at 80% 85%, rgba(101, 67, 33, 0.08) 10%, transparent 50%);
+    box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.7), inset 0 0 50px rgba(101, 67, 33, 0.3), inset 0px 0px 8px rgba(60, 30, 10, 0.5);
+    border-radius: 2px 25px 5px 30px / 25px 3px 30px 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.orta-ust-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 2px solid rgba(92, 58, 33, 0.1);
+    padding-bottom: 10px;
+}
+
+.parsomen-baslik {
+    font-size: 42px;
+    color: #3e2723;
+    text-align: center;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+/* Görev ekleme formu, inputlar ve modern butonların tasarımını şekillendiriyorum. */
+.todo-alani {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.todo-formu-kapsayici {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid rgba(92, 58, 33, 0.1);
+}
+
+.todo-formu {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.modern-input {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(92, 58, 33, 0.2);
+    padding: 5px;
+    font-size: 28px;
+    outline: none;
+    transition: border-color 0.2s;
+    color: #3e2723;
+}
+
+.modern-input:focus {
+    border-bottom: 2px solid #ea580c;
+}
+
+.modern-buton {
+    background-color: #e6d8c3;
+    color: #5c3a21;
+    border: 2px solid #5c3a21;
+    border-radius: 4px;
+    padding: 0 25px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: bold;
+}
+
+.modern-buton:hover {
+    background-color: #d4c4ab;
+    color: #9a3412;
+    border-color: #9a3412;
+}
+
+.ekstra-girdi-alani {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.modern-secim,
+.modern-tarih {
+    background-color: #e6d8c3;
+    border: 2px solid rgba(92, 58, 33, 0.3);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 20px;
+    color: #5c3a21;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modern-secim:focus,
+.modern-tarih:focus,
+.modern-tarih:hover {
+    border-color: #ea580c;
+}
+
+/* Görev listesindeki maddeleri, alt görevleri ve uzun metinlerin alt satıra geçmesini burada ayarladım. */
+.todo-listesi {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.todo-maddesi {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(92, 58, 33, 0.1);
+    border-radius: 4px;
+    padding: 8px 15px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    gap: 15px;
+}
+
+.todo-maddesi:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.todo-maddesi.tamamlandi {
+    opacity: 0.5;
+    background-color: transparent;
+    border-style: dashed;
+}
+
+.todo-icerik {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 0;
+}
+
+.modern-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: #ea580c;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.todo-metni {
+    font-size: 28px;
+    flex: 1;
+    white-space: normal !important;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    margin-top: -2px;
+}
+
+.todo-maddesi.tamamlandi .todo-metni {
+    text-decoration: line-through;
+    color: #78716c !important;
+}
+
+.murekkep-kahve {
+    color: #2e1a10;
+}
+
+.murekkep-kirmizi {
+    color: #991b1b;
+}
+
+.murekkep-mavi {
+    color: #1e3a8a;
+}
+
+.todo-meta-alani {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.oncelik-rozet,
+.tarih-rozet {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.oncelik-rozet.onemli {
+    background-color: rgba(202, 138, 4, 0.1);
+    color: #ca8a04;
+    border: 1px solid #ca8a04;
+}
+
+.oncelik-rozet.destansi {
+    background-color: rgba(153, 27, 27, 0.1);
+    color: #991b1b;
+    border: 1px solid #991b1b;
+}
+
+.tarih-rozet {
+    background-color: transparent;
+    color: #8a6c5e;
+    border: 1px dashed #8a6c5e;
+}
+
+.duzenle-input {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #ea580c;
+    padding: 0;
+    font-size: 28px;
+    outline: none;
+}
+
+.kaydet-butonu {
+    background-color: #160e0a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.aksiyon-butonlari {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.duzenle-butonu,
+.sil-butonu {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.duzenle-butonu {
+    color: #5c3a21;
+}
+
+.duzenle-butonu:hover {
+    background-color: rgba(92, 58, 33, 0.1);
+    color: #ea580c;
+}
+
+.sil-butonu {
+    color: #8a6c5e;
+    opacity: 0.7;
+}
+
+.sil-butonu:hover {
+    background-color: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+    opacity: 1;
+}
+
+/* Sol menüdeki kategoriler ve filtreleme butonlarının tasarımını düzenledim. */
+.sidebar-bolum {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.sidebar-baslik-satiri {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid #3e2723;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+}
+
+.sidebar-baslik-satiri:hover {
+    border-color: #ea580c;
+}
+
+.sidebar-baslik-satiri h3 {
+    font-size: 26px;
+    color: #c2a878;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.sidebar-ikon {
+    color: #a89f91;
+    font-size: 18px;
+}
+
+.sidebar-icerik {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: hidden;
+}
+
+.sidebar-filtre-butonu {
+    background: transparent;
+    border: 1px solid transparent;
+    color: #a89f91;
+    font-size: 22px;
+    padding: 8px 15px;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.sidebar-filtre-butonu:hover {
+    background-color: rgba(92, 58, 33, 0.3);
+    color: #e6d8c3;
+}
+
+.sidebar-filtre-butonu.aktif {
+    background-color: rgba(234, 88, 12, 0.1);
+    color: #ea580c;
+    border: 1px solid #ea580c;
+    font-weight: bold;
+}
+
+.kategori-listesi {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.kategori-maddesi {
+    font-size: 26px;
+    color: #a89f91;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kategori-maddesi:hover {
+    background-color: rgba(92, 58, 33, 0.3);
+    color: #e6d8c3;
+}
+
+.kategori-maddesi.aktif {
+    background-color: rgba(234, 88, 12, 0.1);
+    color: #ea580c;
+    font-weight: bold;
+    border-left: 4px solid #ea580c;
+}
+
+.kategori-isim {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.kategori-sil-butonu {
+    background: none;
+    border: none;
+    color: rgba(220, 38, 38, 0.5);
+    font-size: 18px;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.kategori-maddesi:hover .kategori-sil-butonu {
+    opacity: 1;
+}
+
+.kategori-sil-butonu:hover {
+    color: #dc2626;
+    transform: scale(1.2);
+}
+
+.yeni-kategori-ekle {
+    background-color: #12100e;
+    border: 1px dashed #ea580c;
+    color: #ea580c;
+    padding: 10px;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.yeni-kategori-ekle:hover {
+    background-color: rgba(234, 88, 12, 0.1);
+    transform: scale(1.02);
+}
+
+.gizli-input {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid #ea580c;
+    color: #e6d8c3;
+    padding: 8px 10px;
+    font-size: 22px;
+    outline: none;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+/* Sağ menüdeki avatar, seviye göstergesi ve pomodoro alanının görünümünü tasarladım. */
+.karakter-panosu {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+}
+
+.dikey-hizala {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+}
+
+.oyun-baslik {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
+}
+
+.sifirla-butonu {
+    background-color: transparent;
+    color: #8a6c5e;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sifirla-butonu:hover {
+    color: #ea580c;
+    transform: rotate(180deg);
+}
+
+.buyuk-avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.serbest-animasyon {
+    image-rendering: pixelated;
+    transform: scale(1.1);
+    filter: drop-shadow(0px 8px 3px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s ease;
+}
+
+.serbest-animasyon:hover {
+    transform: scale(1.2) translateY(-5px);
+}
+
+.isim-satiri {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+.pet-isim {
+    font-size: 32px;
+    color: #e6d8c3;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+}
+
+.seviye-grubu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.pet-seviye {
+    font-size: 18px;
+    color: #fff;
+    background-color: #ea580c;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.xp-bar-dis {
+    flex: 1;
+    height: 6px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.xp-bar-ic {
+    height: 100%;
+    background: linear-gradient(90deg, #ea580c 0%, #dc2626 100%);
+    transition: width 0.4s ease;
+}
+
+.kum-saati-alani {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 4px;
+    margin: 15px 0;
+}
+
+.dikey-kum-saati {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+}
+
+.kum-saati-ust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.zaman-gostergesi {
+    font-size: 36px;
+    font-weight: bold;
+    color: #e6d8c3;
+    letter-spacing: 2px;
+}
+
+.kum-saati-alt {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+}
+
+.zaman-butonu {
+    flex: 1;
+    background-color: #ea580c;
+    color: #160e0a;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 0;
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: bold;
+}
+
+.zaman-butonu:hover {
+    background-color: #c2410c;
+    color: white;
+}
+
+.zaman-sifirla {
+    background: transparent;
+    border: 1px solid #8a6c5e;
+    color: #8a6c5e;
+    font-size: 18px;
+    border-radius: 4px;
+    width: 40px;
+    cursor: pointer;
+}
+
+.zaman-sifirla:hover {
+    background: #8a6c5e;
+    color: #12100e;
+}
+
+/* Oyuncuya uyarı veya soru sorduğum açılır pencerelerin (modalların) tasarımını yapıyorum. */
+.intro-ekrani {
+    width: 90%;
+    max-width: 600px;
+    padding: 40px;
+    background-color: #160e0a;
+    border: 1px solid #ea580c;
+    border-radius: 8px;
+    margin: auto;
+    box-shadow: 0 0 30px rgba(234, 88, 12, 0.2);
+    text-align: center;
+}
+
+.intro-baslik {
+    font-size: 48px;
+    color: #ea580c;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.intro-metin {
+    font-size: 24px;
+    color: #a89f91;
+    margin: 0 auto 20px auto;
+}
+
+.starter-secim-alani {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.starter-kutu {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 140px;
+}
+
+.starter-kutu.secili {
+    border-color: #ea580c;
+    background-color: rgba(234, 88, 12, 0.1);
+    transform: scale(1.05);
+}
+
+.starter-kutu img {
+    width: 60px;
+    height: 60px;
+    image-rendering: pixelated;
+}
+
+.starter-isim {
+    font-size: 20px;
+    color: #e6d8c3;
+    margin-top: 10px;
+}
+
+.intro-input {
+    width: 100%;
+    background-color: #12100e;
+    border: 1px solid #5c3a21;
+    color: #e6d8c3;
+    padding: 12px;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.intro-input:focus {
+    border-color: #ea580c;
+}
+
+.intro-buton {
+    width: 100%;
+    background-color: #160e0a;
+    color: #ea580c;
+    border: 1px solid #ea580c;
+    border-radius: 4px;
+    padding: 12px 30px;
+    font-size: 26px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+}
+
+.intro-buton:hover {
+    background-color: #ea580c;
+    color: #160e0a;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.auth-gecis-butonu {
+    background: none;
+    border: none;
+    color: #a89f91;
+    font-size: 20px;
+    margin-top: 15px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.auth-gecis-butonu:hover {
+    color: #ea580c;
+}
+
+.hata-mesaji {
+    color: #e6d8c3;
+    font-size: 20px;
+    background-color: rgba(220, 38, 38, 0.8);
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.modal-arkaplan {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-kutu {
+    background-color: #160e0a;
+    border: 1px solid #ea580c;
+    border-radius: 4px;
+    padding: 30px;
+    text-align: center;
+    max-width: 450px;
+    color: #e6d8c3;
+    box-shadow: 0 0 30px rgba(234, 88, 12, 0.1);
+}
+
+.modal-kutu h3 {
+    font-size: 32px;
+    color: #ea580c;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.modal-kutu p {
+    font-size: 24px;
+    color: #a89f91;
+    margin-bottom: 20px;
+}
+
+.modal-butonlar {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.modal-butonlar button {
+    flex: 1;
+    padding: 10px;
+    font-size: 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.2s;
+}
+
+.buton-evet {
+    background-color: #ea580c;
+    color: #160e0a;
+    border-color: #ea580c;
+}
+
+.buton-evet:hover {
+    background-color: #c2410c;
+    border-color: #c2410c;
+}
+
+.buton-hayir {
+    background-color: transparent;
+    color: #a89f91;
+    border-color: #a89f91;
+}
+
+.buton-hayir:hover {
+    color: #e6d8c3;
+    border-color: #e6d8c3;
+}
+
+/* Süresi yaklaşan görevler için ekrana tehlike hissi veren kırmızı bir parlama efekti ekledim. */
+@keyframes tehlike-titremesi {
+    0% {
+        box-shadow: 0 0 5px rgba(220, 38, 38, 0.1);
+        border-color: rgba(220, 38, 38, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 15px rgba(220, 38, 38, 0.6);
+        border-color: rgba(220, 38, 38, 0.8);
+    }
+
+    100% {
+        box-shadow: 0 0 5px rgba(220, 38, 38, 0.1);
+        border-color: rgba(220, 38, 38, 0.2);
+    }
+}
+
+.acil-gorev {
+    animation: tehlike-titremesi 2s infinite !important;
+    border-left: 4px solid #dc2626 !important;
+    background-color: rgba(220, 38, 38, 0.05) !important;
+}
+
+.tarih-rozet.acil {
+    background-color: #dc2626 !important;
+    color: #ffffff !important;
+    border: 1px solid #ff4545 !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    animation: yazi-parlama 1.5s infinite;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.tarih-rozet.gecikmis {
+    background-color: #7f1d1d !important;
+    color: #fecaca !important;
+    border: 1px solid #dc2626 !important;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+@keyframes yazi-parlama {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Telefondan girildiğinde uygulamanın bozulmaması için yan panelleri ekranın üzerinde uçan çekmecelere çevirdim. */
+@media (max-width: 900px) {
+
+    /* Ana gövde ve Arkaplan ayarları */
+    body,
+    html {
+        overflow: hidden;
+    }
+
+    .masa-arkaplan {
+        display: block;
+        overflow-y: auto;
+        height: 100vh;
+    }
+
+    .intro-ekrani {
+        margin: 30px auto 60px auto;
+    }
+
+    /* Izgarayı serbest bırakıyoruz ki parşömen ezilmesin */
+    .calisma-masasi-grid {
+        display: block !important;
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* Parşömeni ekranın tamamına yayıyoruz ve GPU sihrini sıfırlıyoruz */
+    .orta-parsomen-alani {
+        width: 100% !important;
+        height: 100vh !important;
+        padding: 15px !important;
+        contain: none !important;
+        transform: none !important;
+        will-change: auto !important;
+    }
+
+    .ana-kart.dashboard-modu {
+        width: 100%;
+        min-height: 95vh;
+        padding: 20px 15px;
+        margin: 0 auto;
+    }
+
+    /* Yan panelleri havada süzülen şık menülere çeviriyoruz */
+    .yan-panel-wrapper {
+        position: fixed !important;
+        height: 100vh !important;
+        width: 85% !important;
+        max-width: 300px !important;
+        z-index: 9999 !important;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backface-visibility: hidden;
+    }
+
+    /* Sol Menü Animasyonu */
+    .yan-panel-wrapper.sol-panel {
+        top: 0;
+        left: 0;
+        transform: translateX(0);
+    }
+
+    .yan-panel-wrapper.sol-panel.kapali {
+        transform: translateX(-100%) !important;
+    }
+
+    /* Sağ Menü Animasyonu */
+    .yan-panel-wrapper.sag-panel {
+        top: 0;
+        right: 0;
+        transform: translateX(0);
+    }
+
+    .yan-panel-wrapper.sag-panel.kapali {
+        transform: translateX(100%) !important;
+    }
+
+    .sol-menu-kutu,
+    .sag-menu-kutu {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    /* --------------------------------------------------- */
+    /* OKLARIN ÇARPIŞMASINI ÖNLEYEN AKILLI SİSTEM          */
+    /* --------------------------------------------------- */
+    .kenar-ok {
+        display: flex !important;
+        z-index: 10000 !important;
+    }
+
+    /* Sol ok yukarıda durur */
+    .kenar-ok.sol-ok {
+        left: 0;
+        top: 20px !important;
+    }
+
+    /* Panel açılınca tam panelin ucuna yapışır (Ekran darsa 85%, genişse 280px) */
+    .kenar-ok.sol-ok.acik {
+        left: min(85%, 280px) !important;
+    }
+
+    /* Sağ ok sol okla çarpışmasın diye biraz daha aşağıda durur */
+    .kenar-ok.sag-ok {
+        right: 0;
+        top: 100px !important;
+    }
+
+    .kenar-ok.sag-ok.acik {
+        right: min(85%, 300px) !important;
+    }
+
+    /* --------------------------------------------------- */
+    /* GÖREV EKLEME FORMUNU MOBİLE UYDURMA (KAYMA ÇÖZÜMÜ)  */
+    /* --------------------------------------------------- */
+    .todo-formu {
+        flex-direction: column !important;
+        /* Yan yana değil alt alta diz */
+        gap: 12px;
+    }
+
+    .modern-input {
+        width: 100%;
+    }
+
+    .modern-buton {
+        width: 100% !important;
+        /* Butonu boydan boya genişlet */
+        padding: 12px !important;
+    }
+
+    /* Tarih ve Öncelik seçim menülerini yan yana eşit dolduracak şekilde ayarla */
+    .ekstra-girdi-alani {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between !important;
+        gap: 10px;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .modern-secim,
+    .modern-tarih {
+        flex: 1;
+        min-width: 120px;
+        font-size: 16px !important;
+        padding: 10px !important;
+        text-align: center;
+    }
+
+    /* Görev Listesindeki hizalamalar */
+    .orta-ust-bar {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .todo-maddesi {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .todo-meta-alani {
+        margin-left: 35px;
+    }
+
+    .aksiyon-butonlari {
+        align-self: flex-end;
+        margin-top: -30px;
+    }
+}
