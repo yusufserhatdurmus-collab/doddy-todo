@@ -1203,3 +1203,14 @@ html {
         margin-top: -30px;
     }
 }
+
+/* Mobil ekranlarda yan panellerin kaydırılabilir olması için */
+.yan-panel-wrapper {
+    overflow-y: auto;
+    max-height: 100vh;
+    padding-bottom: 40px;
+}
+
+.yan-panel-wrapper::-webkit-scrollbar {
+    display: none;
+}
