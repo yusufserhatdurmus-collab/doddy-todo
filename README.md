@@ -5,7 +5,7 @@ Canlı Uygulama Adresi
 https://doddy-todo.vercel.app/
 
 Teknik Altyapı
-Uygulamanın ön yüzü yaparken ve uğraşırken pekiştirip tecrübe kazanmak amacıyla React ve Vite kullanılarak geliştirdim.Verilerin kalıcı olması ve kullanıcı yönetimi için Firebase Firestore ve Firebase Auth servislerinden yararlandım. Uygulama, Vercel üzerinden sürekli canlı tutulmaktadır.
+Uygulamanın ön yüzü yaparken ve uğraşırken pekiştirip tecrübe kazanmak amacıyla React ve Vite kullanılarak geliştirdim.Verilerin kalıcı olması ve kullanıcı yönetimi için Firebase Firestore ve Firebase Auth servislerinden yararlandım. Uygulama, Vercel üzerinden sürekli canlı tutulmaktadır.Ayrıca mobil için de kullanabilmesi adına responsive ve uygun şekilde iyileştirdim.
 
 
 Kurulum ve Çalıştırma
